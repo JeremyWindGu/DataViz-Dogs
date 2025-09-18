@@ -1,0 +1,139 @@
+/* Dog-inspired color palette */
+:root {
+  --bread-color: #D4A574;      /* Shiba Inu/Corgi bread color */
+  --bread-light: #E8C4A0;      /* Lighter bread tone */
+  --bread-dark: #B8935A;       /* Darker bread tone */
+  --border-black: #2C2C2C;     /* Border Collie black */
+  --border-white: #F8F8F8;     /* Border Collie white */
+  --warm-gray: #6B6B6B;        /* Warm gray for text */
+  --soft-shadow: rgba(44, 44, 44, 0.1);
+}
+
+* { 
+  box-sizing: border-box; 
+}
+
+body { 
+  font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif; 
+  margin: 0; 
+  color: var(--border-black); 
+  background: var(--border-white);
+  line-height: 1.6;
+}
+
+header { 
+  padding: 20px 24px; 
+  background: linear-gradient(135deg, var(--bread-light) 0%, var(--bread-color) 100%);
+  border-bottom: 2px solid var(--bread-dark);
+  box-shadow: 0 2px 8px var(--soft-shadow);
+}
+
+h1 { 
+  margin: 0 0 8px 0; 
+  font-size: 24px; 
+  font-weight: 600;
+  color: var(--border-black);
+  text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+}
+
+header p {
+  margin: 0;
+  color: var(--warm-gray);
+  font-size: 14px;
+}
+
+nav { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 10px; 
+  padding: 16px 24px; 
+  border-bottom: 1px solid var(--bread-light); 
+  background: var(--border-white); 
+  position: sticky; 
+  top: 0; 
+  z-index: 2;
+  box-shadow: 0 2px 4px var(--soft-shadow);
+}
+
+nav button { 
+  padding: 10px 14px; 
+  border: 2px solid var(--bread-color); 
+  background: var(--border-white); 
+  border-radius: 12px; 
+  cursor: pointer; 
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--border-black);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px var(--soft-shadow);
+}
+
+nav button:hover { 
+  background: var(--bread-light); 
+  border-color: var(--bread-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px var(--soft-shadow);
+}
+
+nav button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px var(--soft-shadow);
+}
+
+main { 
+  padding: 20px 24px 32px; 
+  background: var(--border-white);
+}
+
+#chart { 
+  width: 100%; 
+  height: 70vh; 
+  border: 2px solid var(--bread-light); 
+  border-radius: 16px; 
+  background: var(--border-white); 
+  padding: 16px; 
+  box-shadow: 0 4px 12px var(--soft-shadow);
+}
+
+svg { 
+  font: 13px 'Segoe UI', system-ui, sans-serif; 
+}
+
+.axis path, .axis line { 
+  stroke: var(--warm-gray); 
+  stroke-width: 1.5;
+}
+
+.axis text {
+  fill: var(--warm-gray);
+  font-size: 12px;
+}
+
+.legend { 
+  font-size: 13px; 
+  font-weight: 500;
+}
+
+.tooltip { 
+  position: absolute; 
+  pointer-events: none; 
+  background: var(--border-black); 
+  color: var(--border-white); 
+  padding: 8px 12px; 
+  border-radius: 8px; 
+  font-size: 12px; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border: 1px solid var(--bread-color);
+}
+
+footer {
+  padding: 16px 24px;
+  background: var(--bread-light);
+  border-top: 1px solid var(--bread-color);
+  text-align: center;
+}
+
+footer small {
+  color: var(--warm-gray);
+  font-size: 13px;
+}

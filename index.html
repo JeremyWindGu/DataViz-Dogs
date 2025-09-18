@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dogs Visualizations</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- D3 and d3-sankey via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Street Dogs Observations</h1>
+    <p>Data fields: <code>id</code>, <code>date</code>, <code>location</code>, <code>size</code>, <code>source</code></p>
+  </header>
+
+  <nav>
+    <button data-viz="viz1_line_daily_counts.js">1. Daily Count Line Chart</button>
+    <button data-viz="viz2_pie_source_share.js">2. Observer Contribution Pie Chart</button>
+    <button data-viz="viz3_bar_size_distribution.js">3. Size Distribution Bar Chart</button>
+    <button data-viz="viz4_bar_location_counts.js">4. Location Count Bar Chart</button>
+    <button data-viz="viz5_stacked_date_size.js">5. Date × Size Stacked Bar Chart</button>
+    <button data-viz="viz6_heatmap_source_location.js">6. Observer × Location Heatmap</button>
+    <button data-viz="viz7_grouped_size_by_source.js">7. Observer × Size Grouped Bar Chart</button>
+    <button data-viz="viz8_sankey_source_location_size.js">8. Sankey Diagram (Source→Location→Size)</button>
+    <button data-viz="viz9_bubble_time_location_size.js">9. Time-Location Bubble Chart</button>
+    <button data-viz="viz10_cumulative_by_source.js">10. Cumulative Trend Comparison Line</button>
+  </nav>
+
+  <main>
+    <div id="chart"></div>
+  </main>
+
+  <footer>
+    <small>Tip: Click the buttons above to switch between different visualizations. Supports responsive window resizing.</small>
+  </footer>
+
+  <script>
+    // Helper: parse "Sep 12"/"Sept 12" → Date object (using current year)
+    const MONTHS = {
+      Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, Jul:6, Aug:7, Sep:8, Sept:8, Oct:9, Nov:10, Dec:11
+    };
+    function parseDateStr(s) {
+      if (!s) return null;
+      const parts = s.trim().split(/\s+/);
+      if (parts.length < 2) return null;
+      const m = MONTHS[parts[0]];
+      const d = parseInt(parts[1], 10);
+      const year = new Date().getFullYear();
+      if (Number.isFinite(m) && Number.isFinite(d)) {
+        return new Date(year, m, d);
+      }
+      return null;
+    }
+
+    // Global data cache
+    let DOGS_DATA = [];
+    let currentScript = null;
+
+    // Load data and display first visualization by default
+    fetch('dogs.json')
+      .then(r => r.json())
+      .then(data => {
+        // Preprocessing: standardize fields and date objects
+        DOGS_DATA = data.map(row => ({
+          id: row.id,
+          date: row.date,
+          dateObj: parseDateStr(row.date),
+          location: String(row.location || '').trim(),
+          size: String(row.size || '').trim().toLowerCase(),
+          source: String(row.source || '').trim().toUpperCase()
+        }));
+        loadViz('viz1_line_daily_counts.js');
+      });
+
+    function clearChart() {
+      const chart = document.getElementById('chart');
+      chart.innerHTML = '';
+    }
+
+    function loadViz(jsFile) {
+      clearChart();
+      if (currentScript) {
+        currentScript.remove();
+        currentScript = null;
+      }
+      const s = document.createElement('script');
+      s.src = jsFile + '?t=' + Date.now(); // Prevent caching
+      s.onload = () => {
+        if (window.renderViz) {
+          window.renderViz(DOGS_DATA, '#chart');
+        }
+      };
+      document.body.appendChild(s);
+      currentScript = s;
+    }
+
+    // Bind buttons
+    document.querySelectorAll('nav button').forEach(btn => {
+      btn.addEventListener('click', () => loadViz(btn.dataset.viz));
+    });
+
+    // Re-render current chart when window size changes (simple approach: reload script)
+    window.addEventListener('resize', () => {
+      if (currentScript) {
+        const src = currentScript.getAttribute('src').split('?')[0];
+        loadViz(src);
+      }
+    });
+  </script>
+</body>
+</html>
